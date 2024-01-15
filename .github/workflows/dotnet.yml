@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore --project razor-page.csproj
+      run: dotnet restore --project **/*.csproj
     - name: Build
-      run: dotnet build --no-restore --project razor-page.csproj
+      run: dotnet build --no-restore --project **/*.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal --project razor-page.csproj
+      run: dotnet test --no-build --verbosity normal --project **/*.csproj
