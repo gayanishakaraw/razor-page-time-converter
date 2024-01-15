@@ -23,6 +23,6 @@ jobs:
     # - name: Restore dependencies
     #   run: dotnet restore **/*.csproj
     - name: Build
-      run: dotnet build **/*.csproj
+      run: dotnet build razor-page.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal **/*.csproj
+      run: dotnet test --no-build --verbosity normal razor-page.csproj
