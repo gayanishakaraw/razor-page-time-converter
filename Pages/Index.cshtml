@@ -1,0 +1,25 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page 1";
+
+    // Read client timezone from cookie
+    string clientTimezone = HttpContext.Request.Cookies["clientTimezone"] ?? "America/New_York"; // Default to EST if cookie doesn't exist
+    TimeZoneInfo clientTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(clientTimezone);
+
+    // Convert DateTime field based on client timezone
+    DateTime convertedDateTime = TimeZoneInfo.ConvertTime(Model.ClientTime, clientTimeZoneInfo).DateTime;
+}
+
+<script>
+    // Get client timezone and set it in a cookie
+    var clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.cookie = "clientTimezone=" + encodeURIComponent(clientTimezone) + "; path=/";
+</script>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Date Time value converter based on the DateTimeOffset value</p>
+    <h2>Original UTC Time: @Html.DisplayFor(modelItem => modelItem.ClientTime)</h2>
+    <h2 id="localTime">Converted Local Time: @convertedDateTime</h2>
+</div>
