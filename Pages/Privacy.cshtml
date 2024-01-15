@@ -2,7 +2,39 @@
 @model PrivacyModel
 @{
     ViewData["Title"] = "Privacy Policy";
+
+    string clientTimezone = "America/New_York"; // Default to EST
+    if (!String.IsNullOrEmpty(HttpContext.Request.Query["timezone"]))
+        // Read client timezone from url
+        clientTimezone = HttpContext.Request.Query["timezone"];
+
+    TimeZoneInfo clientTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(clientTimezone);
+
+    // Convert DateTime field based on client timezone
+    DateTime convertedDateTime = TimeZoneInfo.ConvertTime(Model.ClientTime, clientTimeZoneInfo).DateTime;
 }
+
+<script>
+    var timeZoneParam = "America/New_York"; // Default to EST
+    var currentUrl = window.location.href;
+
+    if (!currentUrl.includes("timezone")) {
+
+        var clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        
+        // Append the new parameter to the current URL
+        var updatedUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'timezone=' + encodeURIComponent(clientTimezone);
+
+        // Use the updated URL as needed
+        window.location.href = updatedUrl;
+    }
+
+</script>
+
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+<p>Date Time value converter based on the DateTimeOffset value - Using URL param</p>
+<h2>Original UTC Time: @Html.DisplayFor(modelItem => modelItem.ClientTime)</h2>
+<h2 id="localTime">Converted Local Time: @convertedDateTime</h2>
